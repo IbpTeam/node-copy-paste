@@ -37,7 +37,9 @@ switch(process.platform) {
 var noop = function() {};
 
 exports.copy = function(text, callback) {
-	var child = spawn(config.copy.command, config.copy.args);
+	var child = spawn(config.copy.command, config.copy.args, {
+    detached: true
+  });
 
 	var done = (callback ? function() { callback.apply(this, arguments); done = noop; } : noop);
 
@@ -66,6 +68,8 @@ exports.copy = function(text, callback) {
 
 		child.stdin.end(config.encode(output));
 	}
+
+  child.unref();
 
 	return text;
 };
